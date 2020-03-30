@@ -1,3 +1,7 @@
+
+
+---
+
 ![](https://www.stellar.org/developers/guides/get-started/assets/developers.png "恒星生态系统")
 
 使用Stellar网络，您可以构建自己的手机钱包，银行工具，可自行支付费用的智能设备，以及几乎所有您梦involving以求的涉及支付的东西！即使Stellar是一个复杂的分布式系统，使用它也不需要很复杂。
@@ -51,6 +55,4 @@ Stellar网络是Stellar核心的全球集合，每个核心由不同的人员和
 所有这些恒星核心（节点网络）最终都同意交易集。网络上的每笔交易都需要支付少量费用：100列（0.00001XLM）。该费用有助于防止不良行为者向网络发送垃圾邮件。
 
 为了帮助您测试工具和应用程序，[Stellar.org](http://stellar.org/)运营着一个小型测试网络和Horizo​​n实例。[开始使用测试网。](https://www.stellar.org/developers/guides/concepts/test-net.html)
-
-
 
