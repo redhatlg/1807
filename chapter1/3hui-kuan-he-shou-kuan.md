@@ -1,5 +1,7 @@
 # 汇款和收款
 
+---
+
 _在继续编写代码中有关Stellar的以下示例之前，请考虑使用_[_Stellar Laboratory_](https://www.stellar.org/laboratory/)_完成以下示例。通过该实验室，您可以通过Endpoint Explorer创建帐户，在测试网上为帐户提供资金，建立交易，运行任何操作以及检查Horizo​​n的响应。_
 
 现在您已经有一个帐户，您可以通过Stellar网络发送和接收资金。如果您尚未创建帐户，请阅读[《入门指南》的第2步](https://www.stellar.org/developers/guides/get-started/create-account.html)。
@@ -82,7 +84,7 @@ loadAccount
 (
 destinationId
 )
-  
+
 // If the account is not found, surface a nicer error message for logging.
 
   .
@@ -92,7 +94,7 @@ function
  (
 error
 ) {
-    
+
 if
  (
 error
@@ -101,7 +103,7 @@ StellarSdk
 .
 NotFoundError
 ) {
-      
+
 throw
 new
 Error
@@ -114,7 +116,7 @@ return
 error
 
   })
-  
+
 // If there was no error, load up-to-date information on your account.
 
   .
@@ -122,7 +124,7 @@ then
 (
 function
 () {
-    
+
 return
 server
 .
@@ -140,7 +142,7 @@ function
 (
 sourceAccount
 ) {
-    
+
 // Start building the transaction.
 transaction
 =
@@ -151,14 +153,14 @@ TransactionBuilder
 (
 sourceAccount
 , {
-      
+
 fee
 : 
 StellarSdk
 .
 BASE_FEE
 ,
-      
+
 networkPassphrase
 : 
 StellarSdk
@@ -177,12 +179,12 @@ Operation
 .
 payment
 ({
-        
+
 destination
 : 
 destinationId
 ,
-        
+
 // Because Stellar allows transaction in many currencies, you must
 // specify the asset type. The special "native" asset represents Lumens.
 asset
@@ -193,13 +195,13 @@ Asset
 .
 native
 (),
-        
+
 amount
 : 
 "10"
 
       }))
-      
+
 // A memo allows you to add your own metadata to a transaction. It's
 // optional and does not affect how Stellar treats the transaction.
 
@@ -214,7 +216,7 @@ text
 (
 'Test Transaction'
 ))
-      
+
 // Wait a maximum of three minutes for the transaction
 
       .
@@ -225,7 +227,7 @@ setTimeout
       .
 build
 ();
-    
+
 // Sign the transaction to prove you are actually the person sending it.
 transaction
 .
@@ -233,7 +235,7 @@ sign
 (
 sourceKeys
 );
-    
+
 // And finally, send it off to Stellar!
 return
 server
@@ -250,7 +252,7 @@ function
 (
 result
 ) {
-    
+
 console
 .
 log
@@ -267,7 +269,7 @@ function
 (
 error
 ) {
-    
+
 console
 .
 error
@@ -276,24 +278,24 @@ error
 , 
 error
 );
-    
+
 // If the result is unknown (no response body, timeout etc.) we simply resubmit
 // already built transaction:
 // server.submitTransaction(transaction);
 
   });
-
 ```
 
 到底发生了什么事？让我们分解一下。
 
 1. 通过从Stellar网络加载关联的帐户数据，确认要发送到的帐户ID确实存在。如果您跳过此步骤，一切实际上都可以，但是这样做可以让您有机会避免进行您知道会失败的交易。您也可以使用此调用对目标帐户执行任何其他可能要执行的验证。例如，如果您正在编写银行软件，那么这是插入法规遵从性检查和KYC验证的好地方。
 
-   加载账户
-   的JavaScript
-   爪哇
-   走
+   加载账户  
+   的JavaScript  
+   爪哇  
+   走  
    蟒蛇
+
    ```
    server
    .
@@ -310,15 +312,15 @@ error
    ) { 
    /* validate the account */
     })
-
    ```
 
 2. 加载您要发送的帐户的数据。一个帐户一次只能执行一项交易[\[5\]，](https://www.stellar.org/developers/guides/get-started/transactions.html#fn5)并且有一个称为[**序号的**](https://www.stellar.org/developers/guides/concepts/accounts.html#sequence-number)东西[，](https://www.stellar.org/developers/guides/concepts/accounts.html#sequence-number)这可以帮助Stellar验证交易的顺序。交易的序列号需要与帐户的序列号匹配，因此您需要从网络中获取帐户的当前序列号。
 
-   载入来源帐户
-   的JavaScript
-   爪哇
+   载入来源帐户  
+   的JavaScript  
+   爪哇  
    蟒蛇
+
    ```
    .
    then
@@ -336,18 +338,18 @@ error
    publicKey
    ());
    })
-
    ```
 
    建立交易时，SDK会自动增加帐户的序列号，因此，如果您要执行第二笔交易，则无需再次检索此信息。
 
 3. 开始建立交易。这需要一个帐户对象，而不仅仅是一个帐户ID，因为它将增加帐户的序列号。
 
-   建立交易
-   的JavaScript
-   爪哇
-   走
+   建立交易  
+   的JavaScript  
+   爪哇  
+   走  
    蟒蛇
+
    ```
    var
    transaction
@@ -359,16 +361,16 @@ error
    (
    sourceAccount
    )
-
    ```
 
 4. 将支付操作添加到该帐户。请注意，您需要指定要发送的资产的类型-Stellar的“本机”货币是流明，但是您可以发送任何类型的资产或货币，从美元到比特币到您信任发行人的任何资产兑现[（下面有更多详细信息）](https://www.stellar.org/developers/guides/get-started/transactions.html#transacting-in-other-currencies)。不过，到目前为止，我们将坚持使用流明，在SDK中将其称为“本机”资产：
 
-   添加操作
-   的JavaScript
-   爪哇
-   走
+   添加操作  
+   的JavaScript  
+   爪哇  
+   走  
    蟒蛇
+
    ```
    .
    addOperation
@@ -379,12 +381,12 @@ error
    .
    payment
    ({
-  
+
    destination
    : 
    destinationId
    ,
-  
+
    asset
    : 
    StellarSdk
@@ -393,24 +395,24 @@ error
    .
    native
    (),
-  
+
    amount
    : 
    "10"
 
    }))
-
    ```
 
    您还应该注意，金额是字符串而不是数字。当使用极小的分数或较大的值时，[浮点数学运算可能会引入较小的误差](https://en.wikipedia.org/wiki/Floating_point#Accuracy_problems)。由于并非所有系统都具有一种本机方式来精确表示极小或很大的小数，因此Stellar使用字符串作为一种可靠的方式来表示任何系统中的确切数量。
 
 5. （可选）您可以将自己的元数据（称为[**备忘录）添加**](https://www.stellar.org/developers/guides/concepts/transactions.html#memo)到事务中。Stellar不会对此数据做任何事情，但是您可以将其用于任何您想要的目的。例如，如果您是一家代表他人接收或发送付款的银行，则您可能会在此处包括付款的实际人员。
 
-   添加备忘录
-   的JavaScript
-   爪哇
-   走
+   添加备忘录  
+   的JavaScript  
+   爪哇  
+   走  
    蟒蛇
+
    ```
    .
    addMemo
@@ -423,16 +425,16 @@ error
    (
    'Test Transaction'
    ))
-
    ```
 
 6. 现在，事务已拥有所需的所有数据，您必须使用秘密种子对它进行加密签名。这证明数据实际上来自您，而不是冒充您的人。
 
-   签署交易
-   的JavaScript
-   爪哇
-   走
+   签署交易  
+   的JavaScript  
+   爪哇  
+   走  
    蟒蛇
+
    ```
    transaction
    .
@@ -440,16 +442,16 @@ error
    (
    sourceKeys
    );
-
    ```
 
 7. 最后，将其发送到Stellar网络！
 
-   提交交易
-   的JavaScript
-   爪哇
-   走
+   提交交易  
+   的JavaScript  
+   爪哇  
+   走  
    蟒蛇
+
    ```
    server
    .
@@ -457,7 +459,6 @@ error
    (
    transaction
    );
-
    ```
 
 **重要信息**由于错误，网络状况等，您可能不会收到Horizo​​n服务器的响应。在这种情况下，无法确定交易状态。这就是为什么您应该始终将已构建的事务（或以XDR格式编码的事务）保存在变量或数据库中，如果不知道其状态，则重新提交它的原因。如果交易已成功应用于分类帐，Horizo​​n将仅返回保存的结果，而不会尝试再次提交交易。仅在交易状态未知（因此有机会被包含在分类帐中）的情况下，才会重新提交到网络。
@@ -679,7 +680,6 @@ error
 
     }
 
-
 该程序有两个主要部分。首先，创建一个查询，查询涉及给定帐户的付款。像Stellar中的大多数查询一样，这可能返回大量项目，因此API返回分页令牌，您可以稍后使用该令牌从先前中断的同一点开始查询。在上面的示例中，用于保存和加载分页令牌的功能留为空白，但是在实际的应用程序中，您希望将分页令牌保存到文件或数据库中，这样您就可以在程序停下来的地方继续操作崩溃或用户关闭它。
 
 创建付款查询
@@ -713,7 +713,7 @@ if
  (
 lastToken
 ) {
-  
+
 payments
 .
 cursor
@@ -721,7 +721,6 @@ cursor
 lastToken
 );
 }
-
 ```
 
 第二，查询结果被流式传输。这是监视付款或其他交易的最简单方法。现有的每笔付款都将通过流逐一发送。发送完所有现有付款后，数据流将保持打开状态，并在进行新付款时将其发送出去。
@@ -741,19 +740,18 @@ payments
 .
 stream
 ({
-  
+
 onmessage
 : 
 function
 (
 payment
 ) {
-    
+
 // handle a payment
 
   }
 });
-
 ```
 
 您也可以按组或页面请求付款。处理完每一页付款后，您需要请求下一页，直到没有剩余的为止。
@@ -778,7 +776,7 @@ handlePage
 (
 paymentsPage
 ) {
-  
+
 paymentsPage
 .
 records
@@ -789,11 +787,11 @@ function
 (
 payment
 ) {
-    
+
 // handle a payment
 
   });
-  
+
 return
 paymentsPage
 .
@@ -804,7 +802,6 @@ then
 handlePage
 );
 });
-
 ```
 
 ## 其他货币交易 {#transacting-in-other-currencies}
